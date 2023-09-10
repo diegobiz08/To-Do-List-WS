@@ -16,4 +16,4 @@
 
 
 # 
-     Desarollador por Diego Biz
+     Desarollado por Diego Biz
