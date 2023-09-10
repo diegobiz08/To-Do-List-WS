@@ -9,12 +9,10 @@ import {
     TASK_DELETED,
 } from '../utils/commons';
 
-
-const handleServerError = (res: Response, error: any, errorMessage: string) => {
+export const handleServerError = (res: Response, error: any, errorMessage: string) => {
     console.error(error);
     res.status(500).json({ error: errorMessage });
 };
-
 
 export const getItems = async (req: Request, res: Response): Promise<void> => {
     try {

@@ -1,9 +1,7 @@
-# Lista de actividades (To-do-list) WS (Web Service)
+# To-Do-List-WS (Web Service)
+ API REST (back-end) para asistir app web To-Do-List-App usando API's
 
-Desarrollo de aplicación web. En esta aplicación se trabaja exclusivamente back-end
-
-
-# Paquetes utilizados para compilar en local este proyecto:
+# Paquetes necesario de instalar para compilar en local este proyecto:
 
       
       NodeJS: 20.6.0
@@ -11,9 +9,11 @@ Desarrollo de aplicación web. En esta aplicación se trabaja exclusivamente bac
       Typescript: 5.2.2
       NPM: 9.8.1
 
-# Comando para compilación
+# Comando para compilación del proyecto
 
-    npm run dev
+    npm run dev    (Compila API)
+    npx jest       (Compila pruebas unitarias)
 
-# Created By
-      Diego Biz
+
+# 
+     Desarollador por Diego Biz
