@@ -1,0 +1,10 @@
+export const FOUND_ERROR = 'Error al obtener tarea';
+export const CREATE_ERROR = 'Error al crear tarea';
+export const NOT_EXIST = 'Tarea no encontrada';
+export const DELETE_ERROR = 'Error al eliminar';
+export const UPDATE_ERROR = 'Error al actualizar';
+export const TASK_DELETED = 'Tarea eliminada correctamente';
+export const LOGIN_REQUIREMENTS = 'Por favor. Ingresa tu correo y contraseña';
+export const USER_EXISTS = 'Usuario ya existe';
+export const USER_NOT_EXISTS = 'Usuario no existe, por favor registrate';
+export const LOGIN_ERROR = 'Usuario o contraseña son incorrectos';

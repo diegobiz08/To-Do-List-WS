@@ -1,0 +1,47 @@
+{
+  "name": "to-do-list-ws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\" ",
+    "build": "tsc",
+    "start": "node dist/index.jsS"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegobiz08/To-Do-List-WS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegobiz08/To-Do-List-WS/issues"
+  },
+  "homepage": "https://github.com/diegobiz08/To-Do-List-WS#readme",
+  "dependencies": {
+    "bcrypt": "^4.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.4",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/mongoose": "^5.7.1",
+    "@types/morgan": "^1.9.5",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9",
+    "jest": "^29.6.4",
+    "ts-jest": "^29.1.1",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.2.2"
+  }
+}
