@@ -8,6 +8,7 @@ import {
     UPDATE_ERROR,
     TASK_DELETED,
 } from '../utils/commons';
+import {IUser} from '../models/user';
 
 export const handleServerError = (res: Response, error: any, errorMessage: string) => {
     console.error(error);
@@ -15,9 +16,12 @@ export const handleServerError = (res: Response, error: any, errorMessage: strin
 };
 
 export const getItems = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user as IUser;
+    const userId = user._id;
+
     try {
-        const items = await Task.find();
-        res.json(items);
+        const userTasks = await Task.find({ createdBy: userId });
+        res.json(userTasks);
     } catch (error) {
         handleServerError(res, error, FOUND_ERROR);
     }
@@ -39,8 +43,11 @@ export const getItemById = async (req: Request, res: Response): Promise<void> =>
 
 export const createTask = async (req: Request, res: Response): Promise<void> => {
     const { description, completed } = req.body;
+    const user = req.user as IUser;
+    const createdBy = user._id;
+
     try {
-        const newItem: ITask = new Task({ description, completed });
+        const newItem: ITask = new Task({ description, completed, createdBy });
         await newItem.save();
         res.status(201).json(newItem);
     } catch (error) {
