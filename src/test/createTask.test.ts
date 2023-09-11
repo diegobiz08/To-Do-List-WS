@@ -16,7 +16,10 @@ describe('createTask', () => {
         req = {
             body: {
                 description: 'Test Task',
-                completed: false,
+                completed: false
+            },
+            user: {
+                _id: "453523454"
             },
         };
         jsonMock = jest.fn();
