@@ -3,6 +3,7 @@ import { Schema, Document, model } from 'mongoose';
 export interface ITask extends Document {
     description: string;
     completed: boolean;
+    createdBy: string;
 }
 
 const taskSchema = new Schema<ITask>({
@@ -13,6 +14,10 @@ const taskSchema = new Schema<ITask>({
     completed: {
         type: Boolean,
         default: false,
+    },
+    createdBy: {
+        type: String,
+        required: true,
     },
 });
 
