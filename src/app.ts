@@ -2,6 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import userRoutes from "./routes/user.routes";
+import productRoutes from "./routes/product.routes";
+import cartRoutes from "./routes/cart.routes";
 import passport from "passport";
 import passportMiddleware from './middlewares/passport'
 const app = express();
@@ -16,5 +18,7 @@ app.use(passport.initialize());
 passport.use(passportMiddleware);
 
 app.use(userRoutes);
+app.use(productRoutes);
+app.use(cartRoutes);
 
 export default app;

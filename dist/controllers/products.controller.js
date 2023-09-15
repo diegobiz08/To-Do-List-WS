@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProfile = exports.updateByDPI = exports.getProfileByDPI = exports.handleBadRequest = exports.handleServerError = void 0;
+exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProducts = exports.handleBadRequest = exports.handleServerError = void 0;
+const products_1 = __importDefault(require("../models/products"));
 const commons_1 = require("../utils/commons");
 const handleServerError = (res, error, errorMessage) => {
     res.status(500).json({ error: errorMessage });
@@ -19,69 +23,76 @@ const handleBadRequest = (res, message) => {
     res.status(400).json({ msg: message });
 };
 exports.handleBadRequest = handleBadRequest;
-const getProfileByDPI = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { DPI } = req.params;
+const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const item = yield User.findOne({ DPI });
-        if (!item) {
-            res.status(404).json({ error: commons_1.NOT_EXIST });
-            return;
-        }
-        res.json(item);
+        const items = yield products_1.default.find();
+        res.json(items);
     }
     catch (error) {
         (0, exports.handleServerError)(res, error, commons_1.FOUND_ERROR);
     }
 });
-exports.getProfileByDPI = getProfileByDPI;
-const updateByDPI = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, NIT, name, lastName, bornDate, deliveryAddress, phoneNumber } = req.body;
-    const { DPI } = req.params;
-    if (!email || !password || !DPI || !NIT || !name || !lastName || !bornDate || !deliveryAddress || !phoneNumber) {
-        return (0, exports.handleBadRequest)(res, commons_1.LOGIN_REQUIREMENTS);
-    }
+exports.getProducts = getProducts;
+const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const existingEmail = yield User.findOne({ email });
-        const existingNIT = yield User.findOne({ NIT });
-        if (existingEmail && existingEmail.DPI !== DPI) {
-            return (0, exports.handleBadRequest)(res, commons_1.EXISTING_EMAIL);
+        const { name, brand, stockAvailable, discount, discountPrice, picture, description, category, } = req.body;
+        if (!name || !brand || !stockAvailable || !discount || !discountPrice) {
+            return (0, exports.handleBadRequest)(res, commons_1.DATA_REQUIRED);
         }
-        if (existingNIT && existingNIT.DPI !== DPI) {
-            return (0, exports.handleBadRequest)(res, commons_1.EXISTING_NIT);
-        }
-        const updateFields = {
-            email,
-            password,
-            NIT,
+        const newProduct = new products_1.default({
             name,
-            lastName,
-            bornDate,
-            deliveryAddress,
-            phoneNumber
-        };
-        const updatedItem = yield User.findOneAndUpdate({ DPI }, { $set: updateFields }, { new: true });
-        if (!updatedItem) {
-            return res.status(404).json({ error: commons_1.NOT_EXIST });
+            brand,
+            stockAvailable,
+            discount,
+            discountPrice,
+            picture,
+            description,
+            category,
+        });
+        yield newProduct.save();
+        res.status(201).json(newProduct);
+    }
+    catch (error) {
+        (0, exports.handleServerError)(res, error, commons_1.CREATE_ERROR);
+    }
+});
+exports.createProduct = createProduct;
+const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const existingProduct = yield products_1.default.findById(id);
+        if (!existingProduct) {
+            return (0, exports.handleBadRequest)(res, commons_1.NOT_EXIST);
         }
-        return res.json(updatedItem);
+        const { name, brand, stockAvailable, discount, discountPrice, picture, description, category, } = req.body;
+        existingProduct.name = name || existingProduct.name;
+        existingProduct.brand = brand || existingProduct.brand;
+        existingProduct.stockAvailable = stockAvailable || existingProduct.stockAvailable;
+        existingProduct.discount = discount || existingProduct.discount;
+        existingProduct.discountPrice = discountPrice || existingProduct.discountPrice;
+        existingProduct.picture = picture || existingProduct.picture;
+        existingProduct.description = description || existingProduct.description;
+        existingProduct.category = category || existingProduct.category;
+        yield existingProduct.save();
+        res.json(existingProduct);
     }
     catch (error) {
         (0, exports.handleServerError)(res, error, commons_1.UPDATE_ERROR);
     }
 });
-exports.updateByDPI = updateByDPI;
-const deleteProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+exports.updateProduct = updateProduct;
+const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedItem = yield User.findByIdAndRemove(id);
-        if (!deletedItem) {
-            res.status(404).json({ error: commons_1.NOT_EXIST });
-            return;
+        const { id } = req.params;
+        const existingProduct = yield products_1.default.findById(id);
+        if (!existingProduct) {
+            return (0, exports.handleBadRequest)(res, commons_1.NOT_EXIST);
         }
-        res.json({ message: commons_1.USER_DELETED });
+        yield existingProduct.remove();
+        res.json({ message: commons_1.PRODUCT_DELETE });
     }
     catch (error) {
         (0, exports.handleServerError)(res, error, commons_1.DELETE_ERROR);
     }
 });
-exports.deleteProfile = deleteProfile;
+exports.deleteProduct = deleteProduct;

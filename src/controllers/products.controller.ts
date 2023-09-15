@@ -11,6 +11,8 @@ import {
     EXISTING_NIT,
     EXISTING_DPI,
     LOGIN_REQUIREMENTS,
+    DATA_REQUIRED,
+    PRODUCT_DELETE
 
 } from '../utils/commons';
 
@@ -22,82 +24,97 @@ export const handleBadRequest = (res: Response, message: string) => {
     res.status(400).json({ msg: message });
 }
 
-export const getProfileByDPI = async (req: Request, res: Response): Promise<void> => {
-    const { DPI } = req.params;
+export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
-        const item = await User.findOne({ DPI });
-        if (!item) {
-            res.status(404).json({ error: NOT_EXIST });
-            return;
-        }
-        res.json(item);
+        const items = await Product.find();
+        res.json(items);
     } catch (error) {
         handleServerError(res, error, FOUND_ERROR);
     }
 };
 
-export const updateByDPI = async (req: Request, res: Response) => {
-    const {
-        email,
-        password,
-        NIT,
-        name,
-        lastName,
-        bornDate,
-        deliveryAddress,
-        phoneNumber
-    } = req.body;
-
-    const { DPI } = req.params;
-
-    if (!email || !password || !DPI || !NIT || !name || !lastName || !bornDate || !deliveryAddress || !phoneNumber) {
-        return handleBadRequest(res, LOGIN_REQUIREMENTS);
-    }
-
+export const createProduct = async (req: Request, res: Response): Promise<void> => {
     try {
-        const existingEmail = await User.findOne({ email });
-        const existingNIT = await User.findOne({ NIT });
-
-        if (existingEmail && existingEmail.DPI !== DPI) {
-            return handleBadRequest(res, EXISTING_EMAIL);
-        }
-
-        if (existingNIT && existingNIT.DPI !== DPI) {
-            return handleBadRequest(res, EXISTING_NIT);
-        }
-
-        const updateFields = {
-            email,
-            password,
-            NIT,
+        const {
             name,
-            lastName,
-            bornDate,
-            deliveryAddress,
-            phoneNumber
-        };
+            brand,
+            stockAvailable,
+            discount,
+            discountPrice,
+            picture,
+            description,
+            category,
+        } = req.body;
 
-        const updatedItem = await User.findOneAndUpdate({ DPI }, { $set: updateFields }, { new: true });
-
-        if (!updatedItem) {
-            return res.status(404).json({ error: NOT_EXIST });
+        if (!name || !brand || !stockAvailable || !discount || !discountPrice) {
+            return handleBadRequest(res, DATA_REQUIRED);
         }
 
-        return res.json(updatedItem);
+        const newProduct = new Product({
+            name,
+            brand,
+            stockAvailable,
+            discount,
+            discountPrice,
+            picture,
+            description,
+            category,
+        });
+        await newProduct.save();
+        res.status(201).json(newProduct);
+    } catch (error) {
+        handleServerError(res, error, CREATE_ERROR);
+    }
+};
+
+export const updateProduct = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const existingProduct = await Product.findById(id);
+
+        if (!existingProduct) {
+            return handleBadRequest(res, NOT_EXIST);
+        }
+
+        const {
+            name,
+            brand,
+            stockAvailable,
+            discount,
+            discountPrice,
+            picture,
+            description,
+            category,
+        } = req.body;
+
+        existingProduct.name = name || existingProduct.name;
+        existingProduct.brand = brand || existingProduct.brand;
+        existingProduct.stockAvailable = stockAvailable || existingProduct.stockAvailable;
+        existingProduct.discount = discount || existingProduct.discount;
+        existingProduct.discountPrice = discountPrice || existingProduct.discountPrice;
+        existingProduct.picture = picture || existingProduct.picture;
+        existingProduct.description = description || existingProduct.description;
+        existingProduct.category = category || existingProduct.category;
+
+        await existingProduct.save();
+        res.json(existingProduct);
     } catch (error) {
         handleServerError(res, error, UPDATE_ERROR);
     }
 };
 
-export const deleteProfile = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
+export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
     try {
-        const deletedItem = await User.findByIdAndRemove(id);
-        if (!deletedItem) {
-            res.status(404).json({ error: NOT_EXIST });
-            return;
+        const { id } = req.params;
+        const existingProduct = await Product.findById(id);
+
+        if (!existingProduct) {
+            return handleBadRequest(res, NOT_EXIST);
         }
-        res.json({ message: USER_DELETED });
+
+        await existingProduct.remove();
+
+        res.json({ message: PRODUCT_DELETE});
     } catch (error) {
         handleServerError(res, error, DELETE_ERROR);
     }

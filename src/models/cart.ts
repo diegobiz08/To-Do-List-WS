@@ -11,4 +11,4 @@ const cartSchema = new Schema<ICart>({
     total: String,
 });
 
-export const CartModel = model<ICart>('Cart', cartSchema);
+export default model<ICart>('Cart', cartSchema);
