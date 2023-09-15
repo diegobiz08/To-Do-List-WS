@@ -1,12 +1,26 @@
 import {Document, model, Schema} from 'mongoose';
 import bcrypt from 'bcrypt';
+import {
+    PASSWORD_NOT_MATCH,
+    PASSWORD_NOT_VALIDE
+} from '../utils/commons';
 
 export interface IUser extends Document {
     _id: string;
     email: string;
     password: string;
+    passwordConfirmation: string;
+    DPI: string;
+    NIT: string;
+    name: string,
+    lastName: string,
+    bornDate: string,
+    deliveryAddress: string,
+    phoneNumber: string,
     comparePassword: (password: string) => Promise<boolean>
 }
+
+const passwordValidator = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const userSchema = new Schema<IUser>({
     email: {
@@ -18,9 +32,64 @@ const userSchema = new Schema<IUser>({
     },
     password: {
         type: String,
+        required: true,
+        validate: {
+            validator: validatePassword,
+            message: PASSWORD_NOT_VALIDE,
+        },
+    },
+    passwordConfirmation: {
+        type: String,
+        required: true,
+        validate: {
+            validator: confirmedPasswordMatch,
+            message: PASSWORD_NOT_MATCH,
+        },
+    },
+    DPI: { 
+        type: String, 
+        unique: true, 
+        required: true 
+    },
+    NIT: {
+        type: String,
+        unique: true,
         required: true
-    }
+    },
+    name: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    lastName: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    bornDate: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    deliveryAddress: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    phoneNumber: {
+        type: String,
+        unique: true,
+        required: true
+    },
 });
+
+function confirmedPasswordMatch(this: IUser, value: string): boolean {
+    return this.password === value;
+}
+
+function validatePassword(value: string): boolean {
+    return passwordValidator.test(value);
+}
 
 userSchema.pre('save', async function (next) {
     const user = this;

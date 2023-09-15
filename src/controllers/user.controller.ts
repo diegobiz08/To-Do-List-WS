@@ -2,7 +2,18 @@ import { Request, Response } from 'express';
 import User, { IUser } from '../models/user';
 import jwt from 'jsonwebtoken';
 import config from '../config/dbConfig';
-import {LOGIN_ERROR, LOGIN_REQUIREMENTS, NOT_EXIST, USER_EXISTS, USER_NOT_EXISTS} from '../utils/commons';
+import {
+    LOGIN_ERROR,
+    LOGIN_REQUIREMENTS,
+    NOT_EXIST,
+    USER_EXISTS,
+    USER_NOT_EXISTS,
+    EXISTING_EMAIL,
+    EXISTING_NIT,
+    EXISTING_DPI,
+    PASSWORD_NOT_MATCH,
+    SERVER_ERROR
+} from '../utils/commons';
 
 function createToken(user: IUser) {
     return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
@@ -19,24 +30,60 @@ function handleInternalServerError(res: Response, message: string) {
 }
 
 export const signUp = async (req: Request, res: Response): Promise<Response> => {
-    const { email, password } = req.body;
+    const {
+        email,
+        password,
+        passwordConfirmation,
+        NIT,
+        name,
+        lastName,
+        bornDate,
+        deliveryAddress,
+        phoneNumber
+    } = req.body;
+    
+    const { DPI } = req.params;
 
-    if (!email || !password) {
+    if (!email || !password || !DPI || !NIT || !name || !lastName || !bornDate || !deliveryAddress || !phoneNumber) {
         return handleBadRequest(res, LOGIN_REQUIREMENTS);
     }
 
     try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return handleBadRequest(res, USER_EXISTS);
+        const existingEmail = await User.findOne({ email });
+        const existingNIT = await User.findOne({ NIT });
+        const existingDPI = await User.findOne({ DPI });
+
+        if (existingEmail) {
+            return handleBadRequest(res, EXISTING_EMAIL);
         }
 
-        const newUser = new User({ email, password });
+        if (existingNIT) {
+            return handleBadRequest(res, EXISTING_NIT);
+        }
+
+        if (existingDPI) {
+            return handleBadRequest(res, EXISTING_DPI);
+        }
+
+        const newUser = new User({
+            email,
+            password,
+            passwordConfirmation,
+            DPI,
+            NIT,
+            name,
+            lastName,
+            bornDate,
+            deliveryAddress,
+            phoneNumber
+        });
+
         await newUser.save();
 
         return res.status(201).json(newUser);
-    } catch (error) {
-        return handleInternalServerError(res, LOGIN_ERROR);
+    }  catch (error) {
+        console.log('ERROR CREADO POR: ', error);
+        return handleInternalServerError(res, SERVER_ERROR);
     }
 };
 
@@ -64,6 +111,10 @@ export const signIn = async (req: Request, res: Response) => {
             return handleBadRequest(res, LOGIN_ERROR);
         }
     } catch (error) {
-        return handleInternalServerError(res, LOGIN_ERROR);
+        console.log('ERROR CREADO POR: ', error);
+        return handleInternalServerError(res, SERVER_ERROR);
     }
+    
+    
+    
 }
