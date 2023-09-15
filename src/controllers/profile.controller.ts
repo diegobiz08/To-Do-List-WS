@@ -1,20 +1,18 @@
 import { Request, Response } from 'express';
-import Task, { ITask } from '../models/task';
-import User from '../models/user';
+import User, {IUser} from '../models/user';
 import {
     FOUND_ERROR,
     CREATE_ERROR,
     NOT_EXIST,
     DELETE_ERROR,
     UPDATE_ERROR,
-    TASK_DELETED,
+    USER_DELETED,
     EXISTING_EMAIL,
     EXISTING_NIT,
     EXISTING_DPI,
     LOGIN_REQUIREMENTS,
 
 } from '../utils/commons';
-import {IUser} from '../models/user';
 
 export const handleServerError = (res: Response, error: any, errorMessage: string) => {
     res.status(500).json({ error: errorMessage });
@@ -91,43 +89,15 @@ export const updateByDPI = async (req: Request, res: Response) => {
     }
 };
 
-export const getItemById = async (req: Request, res: Response): Promise<void> => {
+export const deleteProfile = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
-        const item = await Task.findById(id);
-        if (!item) {
-            res.status(404).json({ error: NOT_EXIST });
-            return;
-        }
-        res.json(item);
-    } catch (error) {
-        handleServerError(res, error, FOUND_ERROR);
-    }
-};
-
-export const createTask = async (req: Request, res: Response): Promise<void> => {
-    const { description, completed } = req.body;
-    const user = req.user as IUser;
-    const createdBy = user._id;
-
-    try {
-        const newItem: ITask = new Task({ description, completed, createdBy });
-        await newItem.save();
-        res.status(201).json(newItem);
-    } catch (error) {
-        handleServerError(res, error, CREATE_ERROR);
-    }
-};
-
-export const deleteTask = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    try {
-        const deletedItem = await Task.findByIdAndRemove(id);
+        const deletedItem = await User.findByIdAndRemove(id);
         if (!deletedItem) {
             res.status(404).json({ error: NOT_EXIST });
             return;
         }
-        res.json({ message: TASK_DELETED });
+        res.json({ message: USER_DELETED });
     } catch (error) {
         handleServerError(res, error, DELETE_ERROR);
     }

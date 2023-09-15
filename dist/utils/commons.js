@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PASSWORD_NOT_MATCH = exports.PASSWORD_NOT_VALIDE = exports.EXISTING_DPI = exports.EXISTING_NIT = exports.EXISTING_EMAIL = exports.SERVER_ERROR = exports.LOGIN_ERROR = exports.USER_NOT_EXISTS = exports.USER_EXISTS = exports.LOGIN_REQUIREMENTS = exports.TASK_DELETED = exports.UPDATE_ERROR = exports.DELETE_ERROR = exports.NOT_EXIST = exports.CREATE_ERROR = exports.FOUND_ERROR = void 0;
+exports.PASSWORD_NOT_MATCH = exports.PASSWORD_NOT_VALIDE = exports.EXISTING_DPI = exports.EXISTING_NIT = exports.EXISTING_EMAIL = exports.SERVER_ERROR = exports.LOGIN_ERROR = exports.USER_NOT_EXISTS = exports.USER_EXISTS = exports.LOGIN_REQUIREMENTS = exports.USER_DELETED = exports.UPDATE_ERROR = exports.DELETE_ERROR = exports.NOT_EXIST = exports.CREATE_ERROR = exports.FOUND_ERROR = void 0;
 exports.FOUND_ERROR = 'Error al obtener tarea';
 exports.CREATE_ERROR = 'Error al crear tarea';
 exports.NOT_EXIST = 'Datos de usuario no encontradao';
 exports.DELETE_ERROR = 'Error al eliminar';
 exports.UPDATE_ERROR = 'Error al actualizar';
-exports.TASK_DELETED = 'Tarea eliminada correctamente';
+exports.USER_DELETED = 'Usuario eliminado correctamente';
 exports.LOGIN_REQUIREMENTS = 'Por favor. Ingresa todos los campos';
 exports.USER_EXISTS = 'Usuario ya existe';
 exports.USER_NOT_EXISTS = 'Usuario no existe, por favor registrate';

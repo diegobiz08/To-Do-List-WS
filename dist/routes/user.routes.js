@@ -12,4 +12,5 @@ router.post('/api/registro/:DPI', user_controller_1.signUp);
 router.post('/api/login', user_controller_1.signIn);
 router.get('/api/perfil/:DPI', passport_1.default.authenticate('jwt', { session: false }), profile_controller_1.getProfileByDPI);
 router.put('/api/perfil/:DPI', passport_1.default.authenticate('jwt', { session: false }), profile_controller_1.updateByDPI);
+router.delete('/api/perfil/:id', passport_1.default.authenticate('jwt', { session: false }), profile_controller_1.deleteProfile);
 exports.default = router;

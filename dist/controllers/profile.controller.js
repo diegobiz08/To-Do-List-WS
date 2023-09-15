@@ -12,8 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTask = exports.createTask = exports.getItemById = exports.updateByDPI = exports.getProfileByDPI = exports.handleBadRequest = exports.handleServerError = void 0;
-const task_1 = __importDefault(require("../models/task"));
+exports.deleteProfile = exports.updateByDPI = exports.getProfileByDPI = exports.handleBadRequest = exports.handleServerError = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const commons_1 = require("../utils/commons");
 const handleServerError = (res, error, errorMessage) => {
@@ -75,47 +74,18 @@ const updateByDPI = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateByDPI = updateByDPI;
-const getItemById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const item = yield task_1.default.findById(id);
-        if (!item) {
-            res.status(404).json({ error: commons_1.NOT_EXIST });
-            return;
-        }
-        res.json(item);
-    }
-    catch (error) {
-        (0, exports.handleServerError)(res, error, commons_1.FOUND_ERROR);
-    }
-});
-exports.getItemById = getItemById;
-const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { description, completed } = req.body;
-    const user = req.user;
-    const createdBy = user._id;
-    try {
-        const newItem = new task_1.default({ description, completed, createdBy });
-        yield newItem.save();
-        res.status(201).json(newItem);
-    }
-    catch (error) {
-        (0, exports.handleServerError)(res, error, commons_1.CREATE_ERROR);
-    }
-});
-exports.createTask = createTask;
-const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    try {
-        const deletedItem = yield task_1.default.findByIdAndRemove(id);
+        const deletedItem = yield user_1.default.findByIdAndRemove(id);
         if (!deletedItem) {
             res.status(404).json({ error: commons_1.NOT_EXIST });
             return;
         }
-        res.json({ message: commons_1.TASK_DELETED });
+        res.json({ message: commons_1.USER_DELETED });
     }
     catch (error) {
         (0, exports.handleServerError)(res, error, commons_1.DELETE_ERROR);
     }
 });
-exports.deleteTask = deleteTask;
+exports.deleteProfile = deleteProfile;
