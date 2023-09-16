@@ -3,7 +3,6 @@ import User, { IUser } from '../models/user';
 import jwt from 'jsonwebtoken';
 import config from '../config/dbConfig';
 import {
-    LOGIN_ERROR,
     LOGIN_REQUIREMENTS,
     NOT_EXIST,
     USER_EXISTS,
@@ -11,6 +10,7 @@ import {
     EXISTING_EMAIL,
     EXISTING_NIT,
     EXISTING_DPI,
+    LOGIN_ERROR,
     PASSWORD_NOT_MATCH,
     SERVER_ERROR
 } from '../utils/commons';
