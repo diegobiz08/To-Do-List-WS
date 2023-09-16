@@ -27,16 +27,15 @@ export const handleBadRequest = (res: Response, message: string) => {
 
 export const createCart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId, selectedProducts } = req.body;
+        const { selectedProducts } = req.body;
 
-        if (!userId || !selectedProducts || selectedProducts.length === 0) {
+        if (!selectedProducts || selectedProducts.length === 0) {
             return handleBadRequest(res, DATA_REQUIRED);
         }
 
         const totalPrice = await calculateTotalPrice(selectedProducts);
 
         const newCart = new Cart({
-            userId,
             products: selectedProducts,
             total: totalPrice,
         });
@@ -58,3 +57,50 @@ async function calculateTotalPrice(selectedProducts: string[]): Promise<number> 
 
     return totalPrice;
 }
+
+export const getCartDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { cartId } = req.body;
+
+        const cart = await Cart.findById(cartId);
+
+        if (!cart) {
+            return handleBadRequest(res, NOT_EXIST);
+        }
+        res.json(cart);
+    } catch (error) {
+        handleServerError(res, error, 'Error al obtener los detalles del carrito');
+    }
+};
+
+export const deleteProductFromCart = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { cartId, productId } = req.body;
+        const existingCart = await Cart.findById(cartId);
+
+        if (!existingCart) {
+            return handleBadRequest(res, NOT_EXIST);
+        }
+
+        const productIndex = existingCart.products.indexOf(productId);
+
+        if (productIndex === -1) {
+            return handleBadRequest(res, 'El producto no está en el carrito.');
+        }
+
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return handleBadRequest(res, NOT_EXIST);
+        }
+
+        const discountPrice = parseFloat(product.discountPrice);
+
+        existingCart.products.splice(productIndex, 1);
+        existingCart.total = (parseFloat(existingCart.total) - discountPrice).toString();
+        await existingCart.save();
+        res.json(existingCart);
+    } catch (error) {
+        handleServerError(res, error, DELETE_ERROR);
+    }
+};

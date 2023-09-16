@@ -17,6 +17,7 @@ export interface IUser extends Document {
     bornDate: string,
     deliveryAddress: string,
     phoneNumber: string,
+    purchaseHistory: string,
     comparePassword: (password: string) => Promise<boolean>
 }
 
