@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import Cart, { ICart } from '../models/cart';
 import Product from "../models/products";
 import {
-    FOUND_ERROR,
     CREATE_ERROR,
     NOT_EXIST,
     DELETE_ERROR,

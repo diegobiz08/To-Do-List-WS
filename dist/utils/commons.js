@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PASSWORD_NOT_MATCH = exports.PASSWORD_NOT_VALIDE = exports.EXISTING_DPI = exports.EXISTING_NIT = exports.EXISTING_EMAIL = exports.SERVER_ERROR = exports.LOGIN_ERROR = exports.USER_NOT_EXISTS = exports.USER_EXISTS = exports.LOGIN_REQUIREMENTS = exports.PRODUCT_DELETE = exports.DATA_REQUIRED = exports.USER_DELETED = exports.UPDATE_ERROR = exports.DELETE_ERROR = exports.NOT_EXIST = exports.CREATE_ERROR = exports.FOUND_ERROR = void 0;
-exports.FOUND_ERROR = 'Error al obtener tarea';
-exports.CREATE_ERROR = 'Error al crear tarea';
+exports.FOUND_ERROR = 'Error al obtener';
+exports.CREATE_ERROR = 'Error al crear';
 exports.NOT_EXIST = 'Datos de usuario no encontradao';
 exports.DELETE_ERROR = 'Error al eliminar';
 exports.UPDATE_ERROR = 'Error al actualizar';

@@ -1,5 +1,5 @@
-export const FOUND_ERROR = 'Error al obtener tarea';
-export const CREATE_ERROR = 'Error al crear tarea';
+export const FOUND_ERROR = 'Error al obtener';
+export const CREATE_ERROR = 'Error al crear';
 export const NOT_EXIST = 'Datos de usuario no encontradao';
 export const DELETE_ERROR = 'Error al eliminar';
 export const UPDATE_ERROR = 'Error al actualizar';
