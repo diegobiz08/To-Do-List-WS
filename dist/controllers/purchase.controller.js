@@ -25,7 +25,7 @@ const handleBadRequest = (res, message) => {
 };
 exports.handleBadRequest = handleBadRequest;
 const makePurchase = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = '';
+    const userId = req.user;
     try {
         const { selectedProducts } = req.body;
         if (!selectedProducts || selectedProducts.length === 0) {

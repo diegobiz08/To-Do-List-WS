@@ -11,7 +11,8 @@ export default new Strategy(opts, async (payload, done) => {
     try {
         const user = await User.findById(payload.id);
         if(user) {
-            return done(null, user);
+            const userId = user._id;
+            return done(null, userId);
         }
         return done(null, false);
     } catch (error) {

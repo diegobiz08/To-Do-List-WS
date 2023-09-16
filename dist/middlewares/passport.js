@@ -23,7 +23,8 @@ exports.default = new passport_jwt_1.Strategy(opts, (payload, done) => __awaiter
     try {
         const user = yield user_1.default.findById(payload.id);
         if (user) {
-            return done(null, user);
+            const userId = user._id;
+            return done(null, userId);
         }
         return done(null, false);
     }

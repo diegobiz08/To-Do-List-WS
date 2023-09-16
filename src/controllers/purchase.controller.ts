@@ -18,7 +18,7 @@ export const handleBadRequest = (res: Response, message: string) => {
 }
 
 export const makePurchase = async (req: Request, res: Response): Promise<void> => {
-    const userId = '';
+    const userId = req.user;
 
     try {
         const { selectedProducts } = req.body;

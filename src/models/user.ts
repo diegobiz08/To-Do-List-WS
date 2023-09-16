@@ -6,7 +6,6 @@ import {
 } from '../utils/commons';
 
 export interface IUser extends Document {
-    _id: string;
     email: string;
     password: string;
     passwordConfirmation: string;
